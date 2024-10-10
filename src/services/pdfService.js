@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const chromium = require("chrome-aws-lambda"); // Para entornos como Railway
 
 // Función para generar el PDF
