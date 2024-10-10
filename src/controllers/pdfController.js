@@ -15,6 +15,8 @@ exports.convertToPDF = async (req, res) => {
     res.send(pdfBuffer);
   } catch (error) {
     console.error("Error in convertToPDF:", error);
-    res.status(500).json({ error: "Error generating PDF" });
+    res
+      .status(500)
+      .json({ error: "Error generating PDF", details: error.message });
   }
 };

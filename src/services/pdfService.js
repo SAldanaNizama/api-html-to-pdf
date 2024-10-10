@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer-core");
 const chromium = require("chrome-aws-lambda"); // Para entornos como Railway
 
 // Función para generar el PDF
-exports.generatePDF = async (htmlContent) => {
+exports.generatePDF = async (html) => {
   try {
     // Lanza el navegador
     const browser = await puppeteer.launch({
@@ -12,7 +12,7 @@ exports.generatePDF = async (htmlContent) => {
     });
 
     const page = await browser.newPage();
-    await page.setContent(htmlContent);
+    await page.setContent(html);
 
     // Genera el PDF
     const pdfBuffer = await page.pdf({ format: "A4" });
