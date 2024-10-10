@@ -9,19 +9,17 @@ exports.generatePDF = async (html) => {
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
+        "--disable-gpu", // Desactivar GPU
       ],
-      timeout: 30000, // Aumenta el tiempo de espera si es necesario
+      timeout: 30000,
     });
 
     const page = await browser.newPage();
-
-    // Establece el contenido HTML
     await page.setContent(html, { waitUntil: "domcontentloaded" });
 
-    // Genera el PDF
     const pdfBuffer = await page.pdf({
       format: "A4",
-      printBackground: true, // Imprime el fondo
+      printBackground: true,
       margin: {
         top: "10mm",
         right: "10mm",
@@ -30,13 +28,18 @@ exports.generatePDF = async (html) => {
       },
     });
 
+    // Verificar si el buffer está vacío
+    if (pdfBuffer.length === 0) {
+      throw new Error("PDF buffer is empty");
+    }
+
     return pdfBuffer;
   } catch (error) {
     console.error("Error in PDF generation:", error);
-    throw error; // Lanza el error para manejarlo en el controlador
+    throw error;
   } finally {
     if (browser) {
-      await browser.close(); // Asegúrate de cerrar el navegador
+      await browser.close();
     }
   }
 };

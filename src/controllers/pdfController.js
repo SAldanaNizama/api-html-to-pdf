@@ -10,13 +10,13 @@ exports.convertToPDF = async (req, res) => {
 
   try {
     const pdfBuffer = await pdfService.generatePDF(html);
-
-    res.setHeader("Content-Type", "application/pdf");
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="document.pdf"',
+    });
     res.send(pdfBuffer);
   } catch (error) {
-    console.error("Error in convertToPDF:", error);
-    res
-      .status(500)
-      .json({ error: "Error generating PDF", details: error.message });
+    console.error("Error generating PDF:", error);
+    res.status(500).json({ error: "Error generating PDF" });
   }
 };
