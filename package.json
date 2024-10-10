@@ -3,7 +3,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
