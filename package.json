@@ -1,0 +1,14 @@
+{
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "html-pdf": "^3.0.1",
+    "puppeteer": "^23.5.2"
+  }
+}
