@@ -10,22 +10,33 @@ exports.generatePDF = async (html) => {
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
       ],
-      // La siguiente línea es opcional y se puede incluir si hay problemas de tiempo de espera
-      timeout: 30000, // Aumenta el tiempo de espera
+      timeout: 30000, // Aumenta el tiempo de espera si es necesario
     });
 
     const page = await browser.newPage();
 
+    // Establece el contenido HTML
     await page.setContent(html, { waitUntil: "domcontentloaded" });
-    const pdfBuffer = await page.pdf({ format: "A4" });
+
+    // Genera el PDF
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true, // Imprime el fondo
+      margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm",
+      },
+    });
 
     return pdfBuffer;
   } catch (error) {
     console.error("Error in PDF generation:", error);
-    throw error;
+    throw error; // Lanza el error para manejarlo en el controlador
   } finally {
     if (browser) {
-      await browser.close();
+      await browser.close(); // Asegúrate de cerrar el navegador
     }
   }
 };
