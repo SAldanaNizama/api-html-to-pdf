@@ -40,7 +40,8 @@ exports.generatePDF = async (html) => {
 
     return pdfBuffer;
   } catch (error) {
-    console.error("Error en la generación del PDF:", error);
+    // Agrega esta línea para ver detalles del error en la consola
+    console.error("Error generating PDF:", error.message, error.stack);
     throw error;
   } finally {
     if (browser) {
