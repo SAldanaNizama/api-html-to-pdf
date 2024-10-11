@@ -1,5 +1,4 @@
 const pdfService = require("../services/pdfService");
-
 // Controlador para convertir HTML a PDF
 exports.convertToPDF = async (req, res) => {
   const { html } = req.body;

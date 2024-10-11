@@ -3,20 +3,25 @@ const puppeteer = require("puppeteer");
 exports.generatePDF = async (html) => {
   let browser;
   try {
+    // Lanza el navegador Puppeteer
     browser = await puppeteer.launch({
       headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
-        "--disable-gpu", // Desactivar GPU
+        "--disable-gpu",
       ],
-      timeout: 30000,
     });
 
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "domcontentloaded" });
 
+    // Configura el contenido HTML en la página
+    // await page.setContent(html, { waitUntil: "domcontentloaded" });
+    await page.setContent(html, { waitUntil: "networkidle0" });
+    const fs = require("fs");
+    fs.writeFileSync("mi-pdf.pdf", pdfBuffer);
+    // Genera el PDF
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -28,14 +33,14 @@ exports.generatePDF = async (html) => {
       },
     });
 
-    // Verificar si el buffer está vacío
+    // Verifica si el buffer está vacío
     if (pdfBuffer.length === 0) {
-      throw new Error("PDF buffer is empty");
+      throw new Error("El buffer del PDF está vacío");
     }
 
     return pdfBuffer;
   } catch (error) {
-    console.error("Error in PDF generation:", error);
+    console.error("Error en la generación del PDF:", error);
     throw error;
   } finally {
     if (browser) {
