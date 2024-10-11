@@ -1,5 +1,5 @@
 const pdfService = require("../services/pdfService");
-// Controlador para convertir HTML a PDF
+
 exports.convertToPDF = async (req, res) => {
   const { html } = req.body;
 
@@ -9,13 +9,17 @@ exports.convertToPDF = async (req, res) => {
 
   try {
     const pdfBuffer = await pdfService.generatePDF(html);
+
+    // Configuración de las cabeceras para la descarga
     res.set({
       "Content-Type": "application/pdf",
       "Content-Disposition": 'attachment; filename="document.pdf"',
     });
+
+    // Envía el buffer del PDF
     res.send(pdfBuffer);
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    console.error("Error generating PDF:", error.message, error.stack);
     res.status(500).json({ error: "Error generating PDF" });
   }
 };

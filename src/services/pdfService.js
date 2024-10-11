@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 exports.generatePDF = async (html) => {
   let browser;
   try {
-    // Lanza el navegador Puppeteer
+    // Lanzar Puppeteer
     browser = await puppeteer.launch({
       headless: true,
       args: [
@@ -16,12 +16,10 @@ exports.generatePDF = async (html) => {
 
     const page = await browser.newPage();
 
-    // Configura el contenido HTML en la página
-    // await page.setContent(html, { waitUntil: "domcontentloaded" });
-    await page.setContent(html, { waitUntil: "networkidle0" });
-    const fs = require("fs");
-    fs.writeFileSync("mi-pdf.pdf", pdfBuffer);
-    // Genera el PDF
+    // Establecer el contenido HTML en la página
+    await page.setContent(html, { waitUntil: "networkidle0", timeout: 60000 }); // Extiende el timeout a 60 segundos
+
+    // Generar el PDF
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -40,8 +38,11 @@ exports.generatePDF = async (html) => {
 
     return pdfBuffer;
   } catch (error) {
-    // Agrega esta línea para ver detalles del error en la consola
-    console.error("Error generating PDF:", error.message, error.stack);
+    console.error(
+      "Error en la generación del PDF:",
+      error.message,
+      error.stack
+    );
     throw error;
   } finally {
     if (browser) {
