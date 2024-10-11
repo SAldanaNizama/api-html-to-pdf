@@ -10,14 +10,15 @@ exports.convertToPDF = async (req, res) => {
   try {
     const pdfBuffer = await pdfService.generatePDF(html);
 
-    // Configuración de las cabeceras para la descarga
+    // Configurar las cabeceras para la descarga
     res.set({
       "Content-Type": "application/pdf",
       "Content-Disposition": 'attachment; filename="document.pdf"',
+      "Content-Length": pdfBuffer.length, // Añadir la longitud del contenido
     });
 
-    // Envía el buffer del PDF
-    res.send(pdfBuffer);
+    // Envía el buffer como respuesta binaria
+    res.end(pdfBuffer, "binary");
   } catch (error) {
     console.error("Error generating PDF:", error.message, error.stack);
     res.status(500).json({ error: "Error generating PDF" });
